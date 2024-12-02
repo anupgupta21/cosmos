@@ -1,0 +1,17 @@
+syntax = "proto3";
+package helloworld.helloworld;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "helloworld/helloworld/params.proto";
+
+option go_package = "hello-world/x/helloworld/types";
+
+// GenesisState defines the helloworld module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
