@@ -1,9 +1,0 @@
-syntax = "proto3";
-package helloworld.helloworld;
-
-option go_package = "hello-world/x/helloworld/types";
-
-message Message {
-  
-  string text = 1; 
-}
