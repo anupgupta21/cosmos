@@ -76,6 +76,8 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	helloworldmodulekeeper "hello-world/x/helloworld/keeper"
+	messagemodulekeeper "hello-world/x/message/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"hello-world/docs"
@@ -142,6 +144,7 @@ type App struct {
 	ScopedKeepers             map[string]capabilitykeeper.ScopedKeeper
 
 	HelloworldKeeper helloworldmodulekeeper.Keeper
+	MessageKeeper    messagemodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -246,6 +249,7 @@ func New(
 		&app.GroupKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.HelloworldKeeper,
+		&app.MessageKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

@@ -54,8 +54,11 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	helloworldmodulev1 "hello-world/api/helloworld/helloworld/module"
+	messagemodulev1 "hello-world/api/helloworld/message/module"
 	_ "hello-world/x/helloworld/module" // import for side-effects
 	helloworldmoduletypes "hello-world/x/helloworld/types"
+	_ "hello-world/x/message/module" // import for side-effects
+	messagemoduletypes "hello-world/x/message/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -94,6 +97,7 @@ var (
 		circuittypes.ModuleName,
 		// chain modules
 		helloworldmoduletypes.ModuleName,
+		messagemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -119,6 +123,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		helloworldmoduletypes.ModuleName,
+		messagemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -138,6 +143,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		helloworldmoduletypes.ModuleName,
+		messagemoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -296,6 +302,10 @@ var (
 			{
 				Name:   helloworldmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&helloworldmodulev1.Module{}),
+			},
+			{
+				Name:   messagemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&messagemodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
