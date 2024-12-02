@@ -20,7 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/helloworld.message.Msg/UpdateParams"
+	Msg_UpdateParams_FullMethodName      = "/helloworld.message.Msg/UpdateParams"
+	Msg_CreateMessage_FullMethodName     = "/helloworld.message.Msg/CreateMessage"
+	Msg_CreateSupplychain_FullMethodName = "/helloworld.message.Msg/CreateSupplychain"
 )
 
 // MsgClient is the client API for Msg service.
@@ -30,6 +32,8 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	CreateMessage(ctx context.Context, in *MsgCreateMessage, opts ...grpc.CallOption) (*MsgCreateMessageResponse, error)
+	CreateSupplychain(ctx context.Context, in *MsgCreateSupplychain, opts ...grpc.CallOption) (*MsgCreateSupplychainResponse, error)
 }
 
 type msgClient struct {
@@ -49,6 +53,24 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) CreateMessage(ctx context.Context, in *MsgCreateMessage, opts ...grpc.CallOption) (*MsgCreateMessageResponse, error) {
+	out := new(MsgCreateMessageResponse)
+	err := c.cc.Invoke(ctx, Msg_CreateMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CreateSupplychain(ctx context.Context, in *MsgCreateSupplychain, opts ...grpc.CallOption) (*MsgCreateSupplychainResponse, error) {
+	out := new(MsgCreateSupplychainResponse)
+	err := c.cc.Invoke(ctx, Msg_CreateSupplychain_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -56,6 +78,8 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	CreateMessage(context.Context, *MsgCreateMessage) (*MsgCreateMessageResponse, error)
+	CreateSupplychain(context.Context, *MsgCreateSupplychain) (*MsgCreateSupplychainResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -65,6 +89,12 @@ type UnimplementedMsgServer struct {
 
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) CreateMessage(context.Context, *MsgCreateMessage) (*MsgCreateMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMessage not implemented")
+}
+func (UnimplementedMsgServer) CreateSupplychain(context.Context, *MsgCreateSupplychain) (*MsgCreateSupplychainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSupplychain not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -97,6 +127,42 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateMessage(ctx, req.(*MsgCreateMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CreateSupplychain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateSupplychain)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateSupplychain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateSupplychain_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateSupplychain(ctx, req.(*MsgCreateSupplychain))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -107,6 +173,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "CreateMessage",
+			Handler:    _Msg_CreateMessage_Handler,
+		},
+		{
+			MethodName: "CreateSupplychain",
+			Handler:    _Msg_CreateSupplychain_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -28,6 +28,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "CreateMessage",
+					Use:            "create-message [text]",
+					Short:          "Send a create-message tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "text"}},
+				},
+				{
+					RpcMethod:      "CreateSupplychain",
+					Use:            "create-supplychain [item-code] [quantity] [item-desc]",
+					Short:          "Send a create-supplychain tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "itemCode"}, {ProtoField: "quantity"}, {ProtoField: "itemDesc"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
