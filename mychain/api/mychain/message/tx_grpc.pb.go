@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: mychain/mychain/tx.proto
+// source: mychain/message/tx.proto
 
-package mychain
+package message
 
 import (
 	context "context"
@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/mychain.mychain.Msg/UpdateParams"
+	Msg_UpdateParams_FullMethodName = "/mychain.message.Msg/UpdateParams"
+	Msg_SetMessage_FullMethodName   = "/mychain.message.Msg/SetMessage"
 )
 
 // MsgClient is the client API for Msg service.
@@ -29,6 +30,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	SetMessage(ctx context.Context, in *MsgSetMessage, opts ...grpc.CallOption) (*MsgSetMessageResponse, error)
 }
 
 type msgClient struct {
@@ -48,6 +50,15 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) SetMessage(ctx context.Context, in *MsgSetMessage, opts ...grpc.CallOption) (*MsgSetMessageResponse, error) {
+	out := new(MsgSetMessageResponse)
+	err := c.cc.Invoke(ctx, Msg_SetMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -55,6 +66,7 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	SetMessage(context.Context, *MsgSetMessage) (*MsgSetMessageResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -64,6 +76,9 @@ type UnimplementedMsgServer struct {
 
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) SetMessage(context.Context, *MsgSetMessage) (*MsgSetMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetMessage not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -96,18 +111,40 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetMessage(ctx, req.(*MsgSetMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Msg_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "mychain.mychain.Msg",
+	ServiceName: "mychain.message.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
 		},
+		{
+			MethodName: "SetMessage",
+			Handler:    _Msg_SetMessage_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "mychain/mychain/tx.proto",
+	Metadata: "mychain/message/tx.proto",
 }

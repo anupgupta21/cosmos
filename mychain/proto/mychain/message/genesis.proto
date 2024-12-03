@@ -1,0 +1,17 @@
+syntax = "proto3";
+package mychain.message;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "mychain/message/params.proto";
+
+option go_package = "github.com/username/mychain/x/message/types";
+
+// GenesisState defines the message module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
